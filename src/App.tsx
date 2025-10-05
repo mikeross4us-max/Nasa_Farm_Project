@@ -6,11 +6,12 @@ import { ChapterCard } from './components/ChapterCard';
 import { SubchapterCard } from './components/SubchapterCard';
 import { QuizContainer } from './components/Quiz/QuizContainer';
 import { Leaderboard } from './components/Leaderboard';
+import { FarmSimulator } from './components/FarmSimulator/FarmSimulator';
 import { supabase } from './lib/supabase';
 import { useBackgroundMusic } from './hooks/useSound';
-import { Trophy, BookOpen } from 'lucide-react';
+import { Trophy, BookOpen, Gamepad2 } from 'lucide-react';
 
-type View = 'chapters' | 'subchapter' | 'quiz' | 'leaderboard';
+type View = 'chapters' | 'subchapter' | 'quiz' | 'leaderboard' | 'farm-simulator';
 
 function AppContent() {
   const { user, loading: authLoading } = useAuth();
@@ -22,7 +23,7 @@ function AppContent() {
   const [selectedSubchapter, setSelectedSubchapter] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  useBackgroundMusic('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3', 0.15);
+  useBackgroundMusic(true);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -122,6 +123,17 @@ function AppContent() {
           >
             <BookOpen size={20} />
             Chapters
+          </button>
+          <button
+            onClick={() => setView('farm-simulator')}
+            className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all ${
+              view === 'farm-simulator'
+                ? 'bg-green-600 text-white shadow-lg'
+                : 'bg-white text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            <Gamepad2 size={20} />
+            Farm Simulator
           </button>
           <button
             onClick={() => setView('leaderboard')}
@@ -241,6 +253,8 @@ function AppContent() {
                 </div>
               </div>
             )}
+
+            {view === 'farm-simulator' && <FarmSimulator />}
 
             {view === 'leaderboard' && <Leaderboard />}
           </>
